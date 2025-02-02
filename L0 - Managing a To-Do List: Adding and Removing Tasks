@@ -1,0 +1,6 @@
+let todoList = ["Wake up", "Exercise", "Study", "Work on project", "Sleep"];
+
+todoList.unshift("Check emails");
+todoList.pop();
+
+console.log("Updated To-Do List:", todoList);
