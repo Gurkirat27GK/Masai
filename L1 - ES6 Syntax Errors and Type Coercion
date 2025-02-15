@@ -1,0 +1,34 @@
+const checkout = {
+  items: [],
+  total: 0,
+
+  addItem(item) {
+    if (!item || typeof item !== "object") {
+      console.log("Invalid item.");
+      return;
+    }
+
+    let { name, price } = item;
+
+    if (typeof price === "string" && !isNaN(price)) {
+      price = parseFloat(price); 
+    }
+
+    if (typeof price !== "number" || isNaN(price) || price <= 0) {
+      console.log(`Invalid price for "${name}".`);
+      return;
+    }
+
+    this.items.push({ name, price });
+    this.total += price;
+    console.log(`Added "${name}" - $${price.toFixed(2)}`);
+  },
+
+  getTotal() {
+    return `Total: $${parseFloat(this.total).toFixed(2)}`;
+  },
+};
+
+checkout.addItem({ name: "Coffee Maker", price: "99.95" }); 
+checkout.addItem({ name: "Milk", price: 3.50 }); 
+console.log(checkout.getTotal());
