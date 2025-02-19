@@ -1,0 +1,7 @@
+let arr = [10, 20, 30, 40];
+
+function checkElement(arr, element){
+  console.log(arr.includes(20));
+}
+
+checkElement(arr, 20);
