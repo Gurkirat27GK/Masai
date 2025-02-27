@@ -1,0 +1,25 @@
+function fetchData(){
+  return new Promise((res, rej) => {
+    setTimeout(() => {
+      let n = Math.random();
+      if (n > 0.5){
+        res("Data fetched successfully!");
+      }
+      else{
+        rej("Failed to fetch data")
+      }
+    }, 1000);
+  });
+}
+
+async function fetchDataHnadler(){
+  try{
+    let res = await fetchData();
+    console.log(res);
+  }
+  catch(err){
+    console.log("Error fetching data:", err); 
+  }
+}
+
+fetchDataHnadler();
