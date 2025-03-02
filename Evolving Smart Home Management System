@@ -1,0 +1,137 @@
+function Device(name, type) {
+    this.name = name;
+    this.type = type;
+    this.status = "off";
+}
+
+Device.prototype.turnOn = function() {
+    this.status = "on";
+    console.log(`${this.name} is now ON.`);
+};
+
+Device.prototype.turnOff = function() {
+    this.status = "off";
+    console.log(`${this.name} is now OFF.`);
+};
+
+Device.prototype.getStatus = function() {
+    console.log(`${this.name} is currently ${this.status}.`);
+};
+
+function SmartDevice(name, type, brand, connectivity) {
+    Device.call(this, name, type);
+    this.brand = brand;
+    this.connectivity = connectivity;
+}
+SmartDevice.prototype = Object.create(Device.prototype);
+SmartDevice.prototype.constructor = SmartDevice;
+
+SmartDevice.prototype.updateFirmware = async function() {
+    console.log(`Checking for firmware update on ${this.name}...`);
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    console.log(`${this.name} firmware updated successfully!`);
+};
+
+SmartDevice.prototype.checkConnectivity = function() {
+    console.log(`${this.name} is connected via ${this.connectivity}.`);
+};
+
+function SmartLight(name, brand, connectivity, brightness, color) {
+    SmartDevice.call(this, name, "SmartLight", brand, connectivity);
+    this.brightness = brightness;
+    this.color = color;
+}
+SmartLight.prototype = Object.create(SmartDevice.prototype);
+SmartLight.prototype.constructor = SmartLight;
+
+SmartLight.prototype.adjustBrightness = function(level) {
+    this.brightness = level;
+    console.log(`${this.name} brightness set to ${level}.`);
+};
+
+SmartLight.prototype.changeColor = function(color) {
+    this.color = color;
+    console.log(`${this.name} color changed to ${color}.`);
+};
+
+function SmartThermostat(name, brand, connectivity, temperature, mode) {
+    SmartDevice.call(this, name, "SmartThermostat", brand, connectivity);
+    this.temperature = temperature;
+    this.mode = mode;
+}
+SmartThermostat.prototype = Object.create(SmartDevice.prototype);
+SmartThermostat.prototype.constructor = SmartThermostat;
+
+SmartThermostat.prototype.setTemperature = function(temp) {
+    this.temperature = temp;
+    console.log(`${this.name} temperature set to ${temp}°C.`);
+};
+
+SmartThermostat.prototype.changeMode = function(mode) {
+    this.mode = mode;
+    console.log(`${this.name} mode changed to ${mode}.`);
+};
+
+function SmartHome(owner) {
+    this.owner = owner;
+    this.devices = [];
+}
+
+SmartHome.prototype.addDevice = function(device) {
+    this.devices.push(device);
+    console.log(`${device.name} added to ${this.owner}'s smart home.`);
+};
+
+SmartHome.prototype.removeDevice = function(deviceName) {
+    this.devices = this.devices.filter(device => device.name !== deviceName);
+    console.log(`${deviceName} removed from ${this.owner}'s smart home.`);
+};
+
+SmartHome.prototype.listDevices = function() {
+    console.log(`Devices in ${this.owner}'s smart home:`);
+    this.devices.forEach(device => console.log(`- ${device.name} (${device.type})`));
+};
+
+function User(username, password) {
+    this.username = username;
+    this.password = password;
+    this.smartHome = new SmartHome(username);
+}
+
+User.prototype.authenticate = async function() {
+    console.log(`Authenticating ${this.username}...`);
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    console.log(`${this.username} authenticated successfully!`);
+};
+
+User.prototype.addDeviceToHome = function(device) {
+    this.smartHome.addDevice(device);
+};
+
+User.prototype.removeDeviceFromHome = function(deviceName) {
+    this.smartHome.removeDevice(deviceName);
+};
+
+(async function demo() {
+    const user = new User("Alice", "secure123");
+    await user.authenticate();
+
+    const light = new SmartLight("Living Room Light", "Philips", "WiFi", 50, "Warm White");
+    const thermostat = new SmartThermostat("Bedroom Thermostat", "Nest", "WiFi", 22, "Cooling");
+
+    user.addDeviceToHome(light);
+    user.addDeviceToHome(thermostat);
+
+    user.smartHome.listDevices();
+
+    light.turnOn();
+    light.adjustBrightness(80);
+    light.changeColor("Blue");
+    await light.updateFirmware();
+
+    thermostat.setTemperature(24);
+    thermostat.changeMode("Heating");
+
+    user.removeDeviceFromHome("Living Room Light");
+    user.smartHome.listDevices();
+})();
